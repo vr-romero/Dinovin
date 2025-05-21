@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -62,11 +61,17 @@ function update() {
   requestAnimationFrame(update);
 }
 
-document.addEventListener("keydown", function () {
+function jump() {
   if (!dino.jumping) {
     dino.vy = -20;
     dino.jumping = true;
   }
-});
+}
+
+// Detecta salto con teclado
+document.addEventListener("keydown", jump);
+
+// Detecta salto con toque en móvil
+document.addEventListener("touchstart", jump);
 
 update();
