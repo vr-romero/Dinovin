@@ -2,17 +2,20 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+// Pantalla completa
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+let groundY = canvas.height * 0.85;
+
 let dino = {
   x: 50,
-  y: canvas.height - 90,
-  width: 50,
-  height: 50,
+  y: groundY - 100,
+  width: 80,
+  height: 80,
   vy: 0,
   jumping: false,
-  color: "#8e44ad"
+  color: "#6c5ce7"
 };
 
 let gravity = 2;
@@ -23,8 +26,13 @@ let gameOver = false;
 let startDelay = 120;
 
 function drawBackground() {
-  ctx.fillStyle = "#ff69b4"; // Rosa brillante
+  ctx.fillStyle = "#ff4db8"; // Rosa brillante saturado
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawGround() {
+  ctx.fillStyle = "#ffb6e6";
+  ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
 }
 
 function drawDino() {
@@ -35,19 +43,20 @@ function drawDino() {
 }
 
 function drawObstacle(ob) {
-  ctx.fillStyle = "#e74c3c";
+  ctx.fillStyle = ob.color;
   ctx.fillRect(ob.x, ob.y, ob.width, ob.height);
 }
 
 function update() {
   frame++;
   drawBackground();
+  drawGround();
 
   if (dino.jumping) {
     dino.vy += gravity;
     dino.y += dino.vy;
-    if (dino.y >= canvas.height - 90) {
-      dino.y = canvas.height - 90;
+    if (dino.y >= groundY - dino.height) {
+      dino.y = groundY - dino.height;
       dino.jumping = false;
       dino.vy = 0;
     }
@@ -55,19 +64,20 @@ function update() {
 
   drawDino();
 
-  if (frame > startDelay && frame % 60 === 0) {
-    let height = 60 + Math.random() * 40;
+  if (frame > startDelay && frame % 70 === 0) {
+    let height = 40 + Math.random() * 100;
     obstacles.push({
       x: canvas.width,
-      y: canvas.height - height,
-      width: 30,
-      height: height
+      y: groundY - height,
+      width: 40,
+      height: height,
+      color: "#d63031"
     });
   }
 
   for (let i = 0; i < obstacles.length; i++) {
     let ob = obstacles[i];
-    ob.x -= 5;
+    ob.x -= 6;
     drawObstacle(ob);
 
     if (
@@ -86,22 +96,23 @@ function update() {
   }
 
   ctx.fillStyle = "#fff";
-  ctx.font = "20px Arial";
-  ctx.fillText("Score: " + score, 10, 30);
+  ctx.font = "bold 22px Arial";
+  ctx.fillText("Score: " + score, 20, 40);
 
   if (!gameOver) {
     requestAnimationFrame(update);
   } else {
+    ctx.font = "bold 28px Arial";
+    ctx.fillText("Game Over!", canvas.width / 2 - 80, canvas.height / 2);
     setTimeout(() => {
       location.reload();
     }, 1500);
-    ctx.fillText("Game Over!", canvas.width / 2 - 60, canvas.height / 2);
   }
 }
 
 function jump() {
   if (!dino.jumping && !gameOver) {
-    dino.vy = -25;
+    dino.vy = -28;
     dino.jumping = true;
   }
 }
