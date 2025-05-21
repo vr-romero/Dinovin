@@ -1,3 +1,4 @@
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -68,10 +69,10 @@ function jump() {
   }
 }
 
-// Detecta salto con teclado
+// Salto con teclado
 document.addEventListener("keydown", jump);
 
-// Detecta salto con toque en móvil
+// Salto con toque en móviles
 document.addEventListener("touchstart", jump);
 
 update();
