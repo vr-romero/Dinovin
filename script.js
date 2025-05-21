@@ -69,10 +69,9 @@ function jump() {
   }
 }
 
-// Salto con teclado
+// Compatibilidad total: teclado, toque y clic
 document.addEventListener("keydown", jump);
-
-// Salto con toque en móviles
 document.addEventListener("touchstart", jump);
+document.addEventListener("click", jump);
 
 update();
